@@ -9,7 +9,6 @@ import json
 import requests
 from configparser import ConfigParser
 
-
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -23,15 +22,18 @@ conf.read("init.conf", encoding="utf8")
 wait = WebDriverWait(driver, 10)
 url = 'https://mis.bjtu.edu.cn/home/'
 URL = 'http://jwc.bjtu.edu.cn'
-
-
-type = conf.getint("token", "type")  # 1为本方案课程 2为其他方案课程
+# 1为本方案课程 2为其他方案课程
+# 1.2均为选修。3是必修课
+# 时间比较少，所以只是简单地增加了一点内容，没有具体测试。如果发现问题可以自己改一下
+type = conf.getint("token", "type")
 type2 = conf.getint("token", "type2")  # 1为搜索 0为不搜索
 user_id_str = conf.getint("token", "user_id_str")  # 学号
 password_str = conf.get("token", "password_str")  # 密码
 xpath_str = conf.get("token", "xpath_str")
 delta = conf.getfloat("token", "delta")
 course_number = conf.get("token", "course_number")
+
+
 # course_number = 'A101020B'
 
 
@@ -57,7 +59,7 @@ def search():
         step2 = driver.find_element_by_xpath(
             '/html/body/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/ul/li[2]/ul/li[1]/a'
         )
-        step2.click()
+        # step2.click()
         time.sleep(delta)
         # 上面的是通用步骤 到达“网上选课”一栏
         if type == 1:
@@ -66,6 +68,8 @@ def search():
         elif type == 2:
             # 其他方案
             other_program()
+        # elif type == 3:
+            # thisterm()
         XuanKe(type)
 
     except:
@@ -88,6 +92,8 @@ def search():
         elif type == 2:
             # 其他方案
             other_program()
+        # elif type == 3:
+        #     thisterm()
         XuanKe(type)
 
 
@@ -101,11 +107,13 @@ def alert(type):
         driver.switch_to.frame(
             driver.find_element_by_xpath(
                 '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[1]/iframe'))
-    else:
+    elif type == 2:
         # 其他方案
         driver.switch_to.frame(
             driver.find_element_by_xpath(
                 '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[2]/iframe'))
+    else:
+        a = 0
 
 
 def duoXuan(i):
@@ -143,9 +151,8 @@ def XuanKe(type):
     count = 1
     while tag:
         try:
-            driver.find_element_by_xpath(
-                '//*[@id="container"]/table/tbody/tr[2]/td[1]/input').click()
-            alert(type)
+            driver.find_element_by_xpath(xpath_str).click()  # 选的是第tr[x]门课
+            # alert(type)
             # duoXuan(i)
             tag = 0
         except Exception as e:
@@ -157,7 +164,7 @@ def XuanKe(type):
 
             if type2 == 1:
                 driver.find_element_by_xpath('/html/body/form/button').click()
-            else:
+            elif type2 == 0:
                 driver.refresh()
                 if type == 1:
                     # 本方案
@@ -165,12 +172,18 @@ def XuanKe(type):
                         driver.find_element_by_xpath(
                             '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[1]/iframe'
                         ))
+
                 else:
                     # 其他方案
                     driver.switch_to.frame(
                         driver.find_element_by_xpath(
                             '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[2]/iframe'
                         ))
+            # 本学期
+            else:
+                driver.get('https://aa.bjtu.edu.cn/course_selection/courseselecttask/selects/')
+                time.sleep(delta)
+
     time.sleep(delta)
     flag = False
     try_cnt = 1
@@ -221,6 +234,7 @@ def this_program():
     driver.switch_to.frame(
         driver.find_element_by_xpath(
             '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[1]/iframe'))
+
     if type2 == 1:
         course = driver.find_element_by_xpath(
             '/html/body/form/input[1]').send_keys(course_number)
@@ -234,6 +248,12 @@ def this_program():
         submit_page = driver.find_element_by_xpath('//*[@id="page_go"]')
         submit_page.click()
     # driver.find_element_by_xpath('//*[@id="container"]/table/tbody/tr[2]/td[1]/input').click()
+
+
+def thisterm():
+    driver.switch_to.frame(
+        driver.find_element_by_xpath(
+            '//*[@id="select-submit-btn"]'))
 
 
 def base64_api(uname, pwd, img, typeid):
@@ -287,7 +307,6 @@ def verification_code_submit(result):
 
 
 def main():
-
     search()
     # get_img()
 
