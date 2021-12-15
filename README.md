@@ -2,7 +2,7 @@ BJTU抢课脚本
 
 [项目地址](https://github.com/aosiweixin/BJTU-CC)||[博客地址](http://www.auswitz.top/2021/11/27/BJTU%E9%80%89%E8%AF%BE%E5%86%B2%E5%86%B2%E5%86%B2/)||[col](https://github.com/MrP25)
 
-<font color=red size=6>试过啦，20211215的抢课暂时用不了</font>
+<font color=red size=6>已更新，个人测试可用，只是目前教务系统不太靠谱，会验证码错误</font>
 
 ## 依赖
 
