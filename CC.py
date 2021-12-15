@@ -152,7 +152,7 @@ def XuanKe(type):
     while tag:
         try:
             driver.find_element_by_xpath(xpath_str).click()  # 选的是第tr[x]门课
-            # alert(type)
+            alert(type)
             # duoXuan(i)
             tag = 0
         except Exception as e:
