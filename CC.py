@@ -164,6 +164,12 @@ def XuanKe(type):
             alert(type)
             # duoXuan(i)
             tag = 0
+            if buzzerSwitch == 1:
+                threadSound = sound()
+                threadSound.start()
+            time.sleep(delta)
+
+
         except Exception as e:
             count = count + 1
             if count == 600:
@@ -215,10 +221,7 @@ def XuanKe(type):
     # //*[@id="container"]/table/tbody/tr[4]/td[9]/div[1]
 
     driver.find_element_by_xpath('//*[@id="select-submit-btn"]').click()
-    if buzzerSwitch==1:
-        threadSound = sound()
-        threadSound.start()
-    time.sleep(delta)
+
 
 
 def other_program():
