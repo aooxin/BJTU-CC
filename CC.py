@@ -8,6 +8,8 @@ import base64
 import json
 import requests
 from configparser import ConfigParser
+import threading
+import winsound
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -32,10 +34,16 @@ password_str = conf.get("token", "password_str")  # 密码
 xpath_str = conf.get("token", "xpath_str")
 delta = conf.getfloat("token", "delta")
 course_number = conf.get("token", "course_number")
-
+buzzerSwitch=conf.getint("token", "buzzerSwitch")
 
 # course_number = 'A101020B'
 
+class sound (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+	    winsound.Beep(800, 1000)
+	    self._running = True
 
 def search():
     try:
@@ -69,7 +77,7 @@ def search():
             # 其他方案
             other_program()
         # elif type == 3:
-            # thisterm()
+        # thisterm()
         XuanKe(type)
 
     except:
@@ -151,10 +159,17 @@ def XuanKe(type):
     count = 1
     while tag:
         try:
-            driver.find_element_by_xpath(xpath_str).click()  # 选的是第tr[x]门课
+            driver.find_element_by_xpath(
+                '/html/body/div[2]/div[2]/div/div[2]/div[5]/div[1]/table/tbody/tr[4]/td[1]/label').click()  # 选的是第tr[x]门课
             alert(type)
             # duoXuan(i)
             tag = 0
+            if buzzerSwitch == 1:
+                threadSound = sound()
+                threadSound.start()
+            time.sleep(delta)
+
+
         except Exception as e:
             count = count + 1
             if count == 600:
@@ -204,8 +219,9 @@ def XuanKe(type):
     # 弹窗提交按钮
 
     # //*[@id="container"]/table/tbody/tr[4]/td[9]/div[1]
+
     driver.find_element_by_xpath('//*[@id="select-submit-btn"]').click()
-    time.sleep(delta)
+
 
 
 def other_program():
@@ -307,21 +323,23 @@ def verification_code_submit(result):
 
 
 def main():
-    search()
-    # get_img()
+    try:
+        search()
+        # get_img()
 
-    screenshot()
+        screenshot()
 
-    img_path = "full_baidu.png"
-    # 用的是图鉴的api去解验证码
-    result = base64_api(uname=conf.get("ttpicture", "uname"), pwd=conf.get("ttpicture", "pwd"),
-                        img=img_path, typeid=16)
-    verification_code_submit(result)
+        img_path = "full_baidu.png"
+        # 用的是图鉴的api去解验证码
+        result = base64_api(uname=conf.get("ttpicture", "uname"), pwd=conf.get("ttpicture", "pwd"),
+                            img=img_path, typeid=16)
+        verification_code_submit(result)
 
-    # print(result)
+        # print(result)
 
-    XuanKe(type)
-
+        XuanKe(type)
+    except Exception as e:
+        XuanKe(type)
 
 if __name__ == '__main__':
     main()
