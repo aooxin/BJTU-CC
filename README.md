@@ -4,13 +4,21 @@ BJTU抢课脚本
 
 <font color=red size=6>已更新，个人测试可用，只是目前教务系统不太靠谱，会验证码错误</font>
 
+
+
+听说全校任选课一直不需要验证码QAQ。[教程](http://www.auswitz.top/2021/11/27/bjtuchooselesson/)
+
+------
+
+**看教程就行，下面不用看，看↑↑↑**
+
 ## 依赖
 
 主要单独需要下载一个selenium用于模拟浏览器，安装起来稍微有一点麻烦，要注意对应版本，网上搜教程就好啦~~
 
 
 
-chromedriver的[下载地址](https://npm.taobao.org/mirrors/chromedriver/)，下载的版本一定要一一对应~
+chromedriver的[下载地址](https://npm.taobao.org/mirrors/chromedriver/)，下载的版本一定要一一对应~，如果实在对应不上，就用最近的就行。
 
 推荐直接使用[**release1.0**](https://github.com/aosiweixin/BJTU-CC/releases/tag/fin)
 
